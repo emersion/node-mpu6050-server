@@ -1,5 +1,7 @@
 #!/usr/bin/python2
 
+# From http://blog.bitify.co.uk/2013/11/3d-opengl-visualisation-of-data-from.html
+
 import pygame
 import urllib
 from OpenGL.GL import *
