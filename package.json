@@ -1,0 +1,31 @@
+{
+  "name": "mpu6050-server",
+  "version": "1.0.0",
+  "description": "A simple test server to visualize data from MPU6050",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/emersion/node-mpu6050-server.git"
+  },
+  "keywords": [
+    "mpu6050",
+    "raspberry",
+    "pi",
+    "i2c"
+  ],
+  "author": "emersion",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/emersion/node-mpu6050-server/issues"
+  },
+  "homepage": "https://github.com/emersion/node-mpu6050-server",
+  "dependencies": {
+    "express": "^4.12.2",
+    "express-ws": "^0.2.5",
+    "i2c-bus": "^0.11.0",
+    "i2c-mpu6050": "^1.0.0"
+  }
+}
