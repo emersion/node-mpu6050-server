@@ -10,10 +10,13 @@ var sensor = new MPU6050(i2c1, address);
 var app = express();
 var appWs = expressWs(app);
 
+app.ws('/socket', function (ws, res) {});
+var wss = appWs.getWss('/socket');
+
 app.get('/rotation', function (req, res) {
 	var rot;
 	try {
-		rot = sensor.readRotation();
+		rot = sensor.readRotationSync();
 	} catch (e) {
 		console.log(e);
 		res.status(500).send(e);
@@ -23,28 +26,30 @@ app.get('/rotation', function (req, res) {
 	res.send(rot.x+' '+rot.y);
 });
 
-app.ws('/rotation', function (ws, res) {});
-var rotationWss = appWs.getWss('/rotation');
-
 app.use(express.static(__dirname+'/public'));
 
 var server = app.listen(process.env.PORT || 9000, function () {
 	console.log('Server listening', server.address());
 
 	setInterval(function () {
-		if (!rotationWss.clients.length) {
+		if (!wss.clients.length) {
 			return;
 		}
 
-		var rot;
+		var data;
 		try {
-			rot = sensor.readRotation();
+			data = sensor.readSync();
 		} catch (e) {
 			console.log(e);
 			return;
 		}
-		rotationWss.clients.forEach(function (client) {
-			client.send(rot.x+' '+rot.y+'\n');
+		var msg = JSON.stringify(data);
+		wss.clients.forEach(function (client) {
+			try {
+				client.send(msg);
+			} catch (e) {
+				console.log(e);
+			}
 		});
 	}, 250);
 });

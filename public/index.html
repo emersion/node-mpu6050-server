@@ -18,6 +18,7 @@
 <script src="/assets/three.min.js"></script>
 <script>
 var rot = { x: 0, y: 0 };
+var pos = { x: 0, y: 0, z: 0 };
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -40,17 +41,23 @@ var material = new THREE.MeshBasicMaterial( { vertexColors: THREE.FaceColors, ov
 var cube = new THREE.Mesh( geometry, material );
 scene.add( cube );
 
+console.log(cube);
+
 function render() {
 	requestAnimationFrame( render );
 
 	cube.rotation.x = -rot.x;
 	cube.rotation.z = -rot.y;
 
+	cube.position.x = pos.x;
+	cube.position.y = pos.y;
+	cube.position.z = pos.z;
+
 	renderer.render( scene, camera );
 }
 render();
 
-var ws = new WebSocket('ws://'+window.location.host+'/rotation');
+var ws = new WebSocket('ws://'+window.location.host+'/socket');
 ws.addEventListener('open', function () {
 	console.log('WebSocket opened!');
 });
@@ -58,10 +65,10 @@ ws.addEventListener('close', function () {
 	console.log('WebSocket closed.');
 });
 ws.addEventListener('message', function (event) {
-	var msg = event.data.trim();
-	var parsedMsg = msg.split(' ');
-	rot.x = parseFloat(parsedMsg[0]) / 180 * Math.PI;
-	rot.y = parseFloat(parsedMsg[1]) / 180 * Math.PI;
+	var json = event.data.trim();
+	var data = JSON.parse(json);
+	rot.x = data.rotation.x / 180 * Math.PI;
+	rot.y = data.rotation.y / 180 * Math.PI;
 });
 </script>
 
