@@ -1,6 +1,6 @@
 # node-mpu6050-server
 
-A simple test server to visualize data from MPU6050.
+A simple test server to visualize data from MPU6050 with [`node-i2c-mpu6050`](https://github.com/emersion/node-i2c-mpu6050).
 
 Contains a web client (go to http://127.0.0.1:9000/) and a Python client.
 
